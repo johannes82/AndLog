@@ -1,3 +1,8 @@
 {
 	"highlighting_mode": "error",
+	"color_scope_info": "comment",
+	"color_scope_verbose": "support.type.exception",
+	"color_scope_warning": "comment",
+	"color_scope_debug": "string",
+	"color_scope_error": "invalid",
 }
