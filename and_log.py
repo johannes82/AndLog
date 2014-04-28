@@ -56,34 +56,119 @@ class EnableHighlightingCommand(sublime_plugin.TextCommand):
 			Pref.highlighted = True
 			print ("Highlighting", Pref.highlighted)
 			if (Pref.highlighting_info):
-				self.highlight_text(self.view, info_pattern, Pref.color_scope_info)
+				highlight_text(self.view, info_pattern, Pref.color_scope_info)
 			if (Pref.highlighting_verbose):
-				self.highlight_text(self.view, verbose_pattern, Pref.color_scope_verbose)
+				highlight_text(self.view, verbose_pattern, Pref.color_scope_verbose)
 			if (Pref.highlighting_warning):
-				self.highlight_text(self.view, warning_pattern, Pref.color_scope_warning)
+				highlight_text(self.view, warning_pattern, Pref.color_scope_warning)
 			if (Pref.highlighting_debug):
-				self.highlight_text(self.view, debug_pattern, Pref.color_scope_debug)
+				highlight_text(self.view, debug_pattern, Pref.color_scope_debug)
 			if (Pref.highlighting_error):
-				self.highlight_text(self.view, error_pattern, Pref.color_scope_error)
+				highlight_text(self.view, error_pattern, Pref.color_scope_error)
 			if (Pref.highlighting_myspin):
-				self.highlight_text(self.view, myspin_pattern, Pref.color_scope_error)
+				highlight_text(self.view, myspin_pattern, Pref.color_scope_error)
 		else:
 			Pref.highlighted = False
 			print ("Highlighting", Pref.highlighted)
-			self.view.erase_regions(info_pattern)
-			self.view.erase_regions(verbose_pattern)
-			self.view.erase_regions(warning_pattern)
-			self.view.erase_regions(debug_pattern)
-			self.view.erase_regions(error_pattern)
-			self.view.erase_regions(myspin_pattern)
+			clear_highlight(self.view)
 
 
-	def highlight_text(self, view, pattern, color):
-		print ("Highlighting ", pattern, "with color", color)
-		regions = []
-		regions += view.find_all(pattern, False)
-		key = pattern
-		view.add_regions(key, regions, color, "", True)
+class ToggleInfoHighlightingCommand(sublime_plugin.TextCommand):
+	"""
+	Command for highlighting static logfiles.
+	"""
+	def run(self, edit):
+		global Pref
+
+		if not (Pref.highlighted):
+			Pref.highlighted = True
+			highlight_text(self.view, info_pattern, Pref.color_scope_info)
+		else:
+			Pref.highlighted = False
+			clear_highlight(self.view)
+
+
+class ToggleVerboseHighlightingCommand(sublime_plugin.TextCommand):
+	"""
+	Command for highlighting static logfiles.
+	"""
+	def run(self, edit):
+		global Pref
+
+		if not (Pref.highlighted):
+			Pref.highlighted = True
+			highlight_text(self.view, verbose_pattern, Pref.color_scope_verbose)
+		else:
+			Pref.highlighted = False
+			clear_highlight(self.view)
+
+
+class ToggleWarningHighlightingCommand(sublime_plugin.TextCommand):
+	"""
+	Command for highlighting static logfiles.
+	"""
+	def run(self, edit):
+		global Pref
+
+		if not (Pref.highlighted):
+			Pref.highlighted = True
+			highlight_text(self.view, warning_pattern, Pref.color_scope_warning)
+		else:
+			Pref.highlighted = False
+			clear_highlight(self.view)
+
+
+class ToggleDebugHighlightingCommand(sublime_plugin.TextCommand):
+	"""
+	Command for highlighting static logfiles.
+	"""
+	def run(self, edit):
+		global Pref
+
+		if not (Pref.highlighted):
+			Pref.highlighted = True
+			highlight_text(self.view, debug_pattern, Pref.color_scope_debug)
+		else:
+			Pref.highlighted = False
+			clear_highlight(self.view)
+
+
+class ToggleErrorHighlightingCommand(sublime_plugin.TextCommand):
+	"""
+	Command for highlighting static logfiles.
+	"""
+	def run(self, edit):
+		global Pref
+
+		if not (Pref.highlighted):
+			Pref.highlighted = True
+			highlight_text(self.view, error_pattern, Pref.color_scope_error)
+		else:
+			Pref.highlighted = False
+			clear_highlight(self.view)
+
+
+def highlight_text(view, pattern, color):
+	"""
+	Function for highlighting text in a specific region that is matched by pattern.
+	"""
+	print ("Highlighting ", pattern, "with color", color)
+	regions = []
+	regions += view.find_all(pattern, False)
+	key = pattern
+	view.add_regions(key, regions, color, "", True)
+
+
+def clear_highlight(view):
+	"""
+	Clear all known highlighting.
+	"""
+	view.erase_regions(info_pattern)
+	view.erase_regions(verbose_pattern)
+	view.erase_regions(warning_pattern)
+	view.erase_regions(debug_pattern)
+	view.erase_regions(error_pattern)
+	view.erase_regions(myspin_pattern)
 
 
 class StartLiveLoggingCommand(sublime_plugin.TextCommand):

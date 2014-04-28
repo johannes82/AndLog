@@ -1,3 +1,10 @@
 [
-	{ "caption": "AndLog: Enable highlighting", "command": "enable_highlighting" }
+	{ "caption": "AndLog: Toggle highlighting", "command": "enable_highlighting" },
+	{ "caption": "AndLog: Toggle Info highlighting", "command": "toggle_info_highlighting" },
+	{ "caption": "AndLog: Toggle Verbose highlighting", "command": "toggle_verbose_highlighting" },
+	{ "caption": "AndLog: Toggle Warning highlighting", "command": "toggle_warning_highlighting" },
+	{ "caption": "AndLog: Toggle Debug highlighting", "command": "toggle_debug_highlighting" },
+	{ "caption": "AndLog: Toggle Error highlighting", "command": "toggle_error_highlighting" },
+	{ "caption": "AndLog: Toggle Custom Tag highlighting", "command": "toggle_custom_highlighting" },
+
 ]
