@@ -1,0 +1,3 @@
+Thanks for installing the AndLog plugin!
+
+If you find this plugin helpful and would like to help improve or maintain it, please reach out to me via the plugin's Github page at https://github.com/johannes82/AndLog.

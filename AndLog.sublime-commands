@@ -1,5 +1,5 @@
 [
-	{ "caption": "AndLog: Toggle highlighting", "command": "enable_highlighting" },
+	{ "caption": "AndLog: Toggle highlighting", "command": "toggle_all_highlighting" },
 	{ "caption": "AndLog: Toggle Info highlighting", "command": "toggle_info_highlighting" },
 	{ "caption": "AndLog: Toggle Verbose highlighting", "command": "toggle_verbose_highlighting" },
 	{ "caption": "AndLog: Toggle Warning highlighting", "command": "toggle_warning_highlighting" },

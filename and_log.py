@@ -17,8 +17,6 @@ global debug_pattern
 debug_pattern = r'(' + base_pattern + '(D)/.*[^\n])'
 global error_pattern
 error_pattern = r'(' + base_pattern + '(E)/.+[^\n])'
-global myspin_pattern
-myspin_pattern = r'(' + base_pattern + '(.{1})/MySpin.+[^\n])'
 
 
 def plugin_loaded():
@@ -28,15 +26,36 @@ def plugin_loaded():
 	Pref.load()
 
 
+	def highlight_text(view, pattern, color):
+		"""
+		Function for highlighting text in a specific region that is matched by pattern.
+		"""
+		print ("Highlighting ", pattern, "with color", color)
+		regions = []
+		regions += view.find_all(pattern, False)
+		key = pattern
+		view.add_regions(key, regions, color, "", True)
+
+
+	def clear_highlight(view):
+		"""
+		Clear all known highlighting.
+		"""
+		view.erase_regions(info_pattern)
+		view.erase_regions(verbose_pattern)
+		view.erase_regions(warning_pattern)
+		view.erase_regions(debug_pattern)
+		view.erase_regions(error_pattern)
+
+
 class Pref:
 	def load(self):
 		settings = sublime.load_settings('AndLog.sublime-settings')
-		Pref.highlighting_info   = settings.get('highlighting_info', False)
+		Pref.highlighting_info      = settings.get('highlighting_info', False)
 		Pref.highlighting_verbose   = settings.get('highlighting_verbose', False)
 		Pref.highlighting_warning   = settings.get('highlighting_warning', False)
-		Pref.highlighting_debug   = settings.get('highlighting_debug', True)
-		Pref.highlighting_error   = settings.get('highlighting_error', True)
-		Pref.highlighting_myspin   = settings.get('highlighting_myspin', True)
+		Pref.highlighting_debug     = settings.get('highlighting_debug', True)
+		Pref.highlighting_error     = settings.get('highlighting_error', True)
 		Pref.highlighted         = False
 		Pref.color_scope_info    = settings.get('color_scope_info', "comment")
 		Pref.color_scope_verbose = settings.get('color_scope_verbose', "support.type.exception")
@@ -45,7 +64,7 @@ class Pref:
 		Pref.color_scope_error   = settings.get('color_scope_error', "invalid")
 
 
-class EnableHighlightingCommand(sublime_plugin.TextCommand):
+class ToggleAllHighlightingCommand(sublime_plugin.TextCommand):
 	"""
 	Command for highlighting static logfiles.
 	"""
@@ -65,8 +84,6 @@ class EnableHighlightingCommand(sublime_plugin.TextCommand):
 				highlight_text(self.view, debug_pattern, Pref.color_scope_debug)
 			if (Pref.highlighting_error):
 				highlight_text(self.view, error_pattern, Pref.color_scope_error)
-			if (Pref.highlighting_myspin):
-				highlight_text(self.view, myspin_pattern, Pref.color_scope_error)
 		else:
 			Pref.highlighted = False
 			print ("Highlighting", Pref.highlighted)
@@ -148,27 +165,26 @@ class ToggleErrorHighlightingCommand(sublime_plugin.TextCommand):
 			clear_highlight(self.view)
 
 
-def highlight_text(view, pattern, color):
+class ToggleCustomHighlightingCommand(sublime_plugin.WindowCommand):
 	"""
-	Function for highlighting text in a specific region that is matched by pattern.
+	Command for highlighting custom tags.
 	"""
-	print ("Highlighting ", pattern, "with color", color)
-	regions = []
-	regions += view.find_all(pattern, False)
-	key = pattern
-	view.add_regions(key, regions, color, "", True)
+	def run(self):
+		global Pref
+		caption = "Type a tag to filter for"
+		initial_text = "MySpin:MySpinServerSDK"
+
+		self.window.show_input_panel(caption, initial_text, self.highlight, None, None)
 
 
-def clear_highlight(view):
-	"""
-	Clear all known highlighting.
-	"""
-	view.erase_regions(info_pattern)
-	view.erase_regions(verbose_pattern)
-	view.erase_regions(warning_pattern)
-	view.erase_regions(debug_pattern)
-	view.erase_regions(error_pattern)
-	view.erase_regions(myspin_pattern)
+	def highlight(self, user_input):
+		self.custom_pattern = r'(' + base_pattern + '([IVWDE])/' + user_input + '.+[^\n])'
+		if not (Pref.highlighted):
+			Pref.highlighted = True
+			highlight_text(self.window.active_view(), self.custom_pattern, Pref.color_scope_error)
+		else:
+			Pref.highlighted = False
+			self.window.active_view().erase_regions(self.custom_pattern)
 
 
 class StartLiveLoggingCommand(sublime_plugin.TextCommand):
@@ -177,3 +193,4 @@ class StartLiveLoggingCommand(sublime_plugin.TextCommand):
 	"""
 	def run(self, edit):
 		print ("This is not implemented yet.")
+
