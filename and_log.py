@@ -26,26 +26,26 @@ def plugin_loaded():
 	Pref.load()
 
 
-	def highlight_text(view, pattern, color):
-		"""
-		Function for highlighting text in a specific region that is matched by pattern.
-		"""
-		print ("Highlighting ", pattern, "with color", color)
-		regions = []
-		regions += view.find_all(pattern, False)
-		key = pattern
-		view.add_regions(key, regions, color, "", True)
+def highlight_text(view, pattern, color):
+	"""
+	Function for highlighting text in a specific region that is matched by pattern.
+	"""
+	print ("Highlighting ", pattern, "with color", color)
+	regions = []
+	regions += view.find_all(pattern, False)
+	key = pattern
+	view.add_regions(key, regions, color, "", True)
 
 
-	def clear_highlight(view):
-		"""
-		Clear all known highlighting.
-		"""
-		view.erase_regions(info_pattern)
-		view.erase_regions(verbose_pattern)
-		view.erase_regions(warning_pattern)
-		view.erase_regions(debug_pattern)
-		view.erase_regions(error_pattern)
+def clear_highlight(view):
+	"""
+	Clear all known highlighting.
+	"""
+	view.erase_regions(info_pattern)
+	view.erase_regions(verbose_pattern)
+	view.erase_regions(warning_pattern)
+	view.erase_regions(debug_pattern)
+	view.erase_regions(error_pattern)
 
 
 class Pref:
