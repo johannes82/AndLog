@@ -172,7 +172,7 @@ class ToggleCustomHighlightingCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		global Pref
 		caption = "Type a tag to filter for"
-		initial_text = "MySpin:MySpinServerSDK"
+		initial_text = ""
 
 		self.window.show_input_panel(caption, initial_text, self.highlight, None, None)
 
